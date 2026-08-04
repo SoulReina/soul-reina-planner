@@ -1,4 +1,4 @@
-# soul-reina-planner
+# ReinaOrga
 
 Mon appli planner personnelle — React + Vite, connectée à Supabase.
 

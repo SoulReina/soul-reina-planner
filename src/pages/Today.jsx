@@ -17,7 +17,7 @@ export default function Today() {
       <PageHeader
         eyebrow={
           isToday ? (
-            'Soul Reina'
+            'ReinaOrga'
           ) : (
             <Link to="/calendrier" className="page-header__back">
               ← Retour au calendrier
