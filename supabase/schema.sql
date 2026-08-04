@@ -10,6 +10,7 @@ create table if not exists priorities (
   id uuid primary key default gen_random_uuid(),
   date date not null default current_date,
   content text not null,
+  level text not null default 'a_faire' check (level in ('urgent', 'important', 'a_faire')),
   is_done boolean not null default false,
   position integer not null default 0,
   created_at timestamptz not null default now()
@@ -26,25 +27,9 @@ create table if not exists schedule_blocks (
   created_at timestamptz not null default now()
 );
 
-create table if not exists habits (
-  id uuid primary key default gen_random_uuid(),
-  name text not null,
-  icon text default '✦',
-  position integer not null default 0,
-  active boolean not null default true,
-  created_at timestamptz not null default now()
-);
-
-create table if not exists habit_logs (
-  id uuid primary key default gen_random_uuid(),
-  habit_id uuid not null references habits (id) on delete cascade,
-  date date not null default current_date,
-  done boolean not null default false,
-  created_at timestamptz not null default now(),
-  unique (habit_id, date)
-);
-
--- Onglet "Rituels" -------------------------------------------------------
+-- Onglet "Rituels" ---------------------------------------------------------
+-- Utilisée à la fois par l'onglet "Rituels" (matin/soir) et par la carte
+-- "Rituels" de l'onglet "Aujourd'hui" : une seule source de vérité.
 
 create table if not exists rituals (
   id uuid primary key default gen_random_uuid(),
@@ -78,7 +63,6 @@ create table if not exists content_items (
 
 create index if not exists idx_priorities_date on priorities (date);
 create index if not exists idx_schedule_blocks_date on schedule_blocks (date);
-create index if not exists idx_habit_logs_date on habit_logs (date);
 create index if not exists idx_ritual_logs_date on ritual_logs (date);
 create index if not exists idx_content_items_date on content_items (date);
 
@@ -88,16 +72,13 @@ create index if not exists idx_content_items_date on content_items (date);
 
 alter table priorities enable row level security;
 alter table schedule_blocks enable row level security;
-alter table habits enable row level security;
-alter table habit_logs enable row level security;
 alter table rituals enable row level security;
 alter table ritual_logs enable row level security;
 alter table content_items enable row level security;
 
 create policy "public access" on priorities for all using (true) with check (true);
 create policy "public access" on schedule_blocks for all using (true) with check (true);
-create policy "public access" on habits for all using (true) with check (true);
-create policy "public access" on habit_logs for all using (true) with check (true);
 create policy "public access" on rituals for all using (true) with check (true);
 create policy "public access" on ritual_logs for all using (true) with check (true);
 create policy "public access" on content_items for all using (true) with check (true);
+

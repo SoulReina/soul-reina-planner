@@ -3,6 +3,19 @@ import { readAll, writeAll } from '../localStore'
 
 const KEY = 'srp_priorities'
 
+export const PRIORITY_LEVELS = ['urgent', 'important', 'a_faire']
+
+export const PRIORITY_LEVEL_LABELS = {
+  urgent: 'Urgent',
+  important: 'Important',
+  a_faire: 'À faire',
+}
+
+export function levelRank(level) {
+  const i = PRIORITY_LEVELS.indexOf(level)
+  return i === -1 ? PRIORITY_LEVELS.length : i
+}
+
 export async function fetchPriorities(date) {
   if (isSupabaseConfigured) {
     const { data, error } = await supabase
@@ -33,11 +46,11 @@ export async function fetchAllPriorities() {
   )
 }
 
-export async function createPriority(date, content) {
+export async function createPriority(date, content, level = 'a_faire') {
   if (isSupabaseConfigured) {
     const { data, error } = await supabase
       .from('priorities')
-      .insert({ date, content })
+      .insert({ date, content, level })
       .select()
       .single()
     if (error) throw error
@@ -48,6 +61,7 @@ export async function createPriority(date, content) {
     id: crypto.randomUUID(),
     date,
     content,
+    level,
     is_done: false,
     position: all.filter((p) => p.date === date).length,
     created_at: new Date().toISOString(),
@@ -68,6 +82,21 @@ export async function setPriorityDone(id, isDone) {
   writeAll(
     KEY,
     readAll(KEY).map((p) => (p.id === id ? { ...p, is_done: isDone } : p))
+  )
+}
+
+export async function setPriorityLevel(id, level) {
+  if (isSupabaseConfigured) {
+    const { error } = await supabase
+      .from('priorities')
+      .update({ level })
+      .eq('id', id)
+    if (error) throw error
+    return
+  }
+  writeAll(
+    KEY,
+    readAll(KEY).map((p) => (p.id === id ? { ...p, level } : p))
   )
 }
 

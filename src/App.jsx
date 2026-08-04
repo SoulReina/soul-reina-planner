@@ -8,7 +8,6 @@ import Rituals from './pages/Rituals'
 import Content from './pages/Content'
 import { PrioritiesProvider } from './context/PrioritiesContext'
 import { ScheduleProvider } from './context/ScheduleContext'
-import { HabitsProvider } from './context/HabitsContext'
 import { RitualsProvider } from './context/RitualsContext'
 import { ContentProvider } from './context/ContentContext'
 
@@ -16,11 +15,9 @@ function AppProviders({ children }) {
   return (
     <PrioritiesProvider>
       <ScheduleProvider>
-        <HabitsProvider>
-          <RitualsProvider>
-            <ContentProvider>{children}</ContentProvider>
-          </RitualsProvider>
-        </HabitsProvider>
+        <RitualsProvider>
+          <ContentProvider>{children}</ContentProvider>
+        </RitualsProvider>
       </ScheduleProvider>
     </PrioritiesProvider>
   )

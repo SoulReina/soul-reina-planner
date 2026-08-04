@@ -160,19 +160,14 @@ export default function Content() {
                 ))}
               </select>
             </div>
-            <div className="content-form__row">
-              <input
-                className="input"
-                type="date"
-                value={form.date}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, date: e.target.value }))
-                }
-              />
-              <button type="submit" className="btn btn-icon" aria-label="Ajouter">
-                <PlusIcon width={16} height={16} />
-              </button>
-            </div>
+            <input
+              className="input"
+              type="date"
+              value={form.date}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, date: e.target.value }))
+              }
+            />
             <textarea
               className="input content-form__notes"
               placeholder="Notes (optionnel)…"
@@ -182,6 +177,10 @@ export default function Content() {
                 setForm((f) => ({ ...f, notes: e.target.value }))
               }
             />
+            <button type="submit" className="btn content-form__submit">
+              <PlusIcon width={16} height={16} />
+              Enregistrer
+            </button>
           </form>
         </div>
       </div>

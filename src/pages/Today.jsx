@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import Priorities from '../features/today/Priorities'
 import Schedule from '../features/today/Schedule'
-import HabitTracker from '../features/today/HabitTracker'
+import RitualTracker from '../features/today/RitualTracker'
 import { todayISO, formatLongDateFR } from '../utils/date'
 import '../features/today/today.css'
 
@@ -30,7 +30,7 @@ export default function Today() {
       <div className="page-content">
         <Priorities date={date} />
         <Schedule date={date} />
-        <HabitTracker date={date} />
+        <RitualTracker date={date} />
       </div>
     </>
   )

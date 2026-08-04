@@ -3,6 +3,7 @@ import {
   fetchAllPriorities,
   createPriority,
   setPriorityDone,
+  setPriorityLevel,
   deletePriority,
 } from '../lib/data/priorities'
 
@@ -26,8 +27,8 @@ export function PrioritiesProvider({ children }) {
     }
   }, [])
 
-  const addPriority = useCallback(async (date, content) => {
-    const item = await createPriority(date, content)
+  const addPriority = useCallback(async (date, content, level) => {
+    const item = await createPriority(date, content, level)
     setPriorities((prev) => [...prev, item])
     return item
   }, [])
@@ -40,14 +41,28 @@ export function PrioritiesProvider({ children }) {
     await setPriorityDone(item.id, nextDone)
   }, [])
 
+  const updatePriorityLevel = useCallback(async (id, level) => {
+    setPriorities((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, level } : p))
+    )
+    await setPriorityLevel(id, level)
+  }, [])
+
   const removePriority = useCallback(async (id) => {
     setPriorities((prev) => prev.filter((p) => p.id !== id))
     await deletePriority(id)
   }, [])
 
   const value = useMemo(
-    () => ({ priorities, loading, addPriority, togglePriority, removePriority }),
-    [priorities, loading, addPriority, togglePriority, removePriority]
+    () => ({
+      priorities,
+      loading,
+      addPriority,
+      togglePriority,
+      updatePriorityLevel,
+      removePriority,
+    }),
+    [priorities, loading, addPriority, togglePriority, updatePriorityLevel, removePriority]
   )
 
   return (
@@ -64,14 +79,21 @@ export function usePriorities() {
 }
 
 export function usePrioritiesForDate(date) {
-  const { priorities, loading, addPriority, togglePriority, removePriority } =
-    usePriorities()
+  const {
+    priorities,
+    loading,
+    addPriority,
+    togglePriority,
+    updatePriorityLevel,
+    removePriority,
+  } = usePriorities()
   const forDate = priorities.filter((p) => p.date === date)
   return {
     priorities: forDate,
     loading,
-    addPriority: (content) => addPriority(date, content),
+    addPriority: (content, level) => addPriority(date, content, level),
     togglePriority,
+    updatePriorityLevel,
     removePriority,
   }
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import { usePriorities } from '../context/PrioritiesContext'
 import { useSchedule } from '../context/ScheduleContext'
-import { useHabits } from '../context/HabitsContext'
+import { useRituals } from '../context/RitualsContext'
 import {
   monthMatrix,
   formatMonthLabelFR,
@@ -21,7 +21,7 @@ export default function Calendar() {
   const [cursor, setCursor] = useState(today)
   const { priorities } = usePriorities()
   const { blocks } = useSchedule()
-  const { habits, logs } = useHabits()
+  const { rituals, logs } = useRituals()
 
   const weeks = useMemo(() => monthMatrix(cursor), [cursor])
 
@@ -33,8 +33,8 @@ export default function Calendar() {
     () => new Set(blocks.map((b) => b.date)),
     [blocks]
   )
-  const habitCompleteDates = useMemo(() => {
-    if (habits.length === 0) return new Set()
+  const ritualCompleteDates = useMemo(() => {
+    if (rituals.length === 0) return new Set()
     const byDate = {}
     logs.forEach((log) => {
       if (!log.done) return
@@ -42,10 +42,10 @@ export default function Calendar() {
     })
     return new Set(
       Object.entries(byDate)
-        .filter(([, count]) => count >= habits.length)
+        .filter(([, count]) => count >= rituals.length)
         .map(([date]) => date)
     )
-  }, [logs, habits])
+  }, [logs, rituals])
 
   return (
     <>
@@ -104,7 +104,7 @@ export default function Calendar() {
                       {priorityDates.has(day) && (
                         <span className="calendar-dot calendar-dot--gold" />
                       )}
-                      {habitCompleteDates.has(day) && (
+                      {ritualCompleteDates.has(day) && (
                         <span className="calendar-dot calendar-dot--sage" />
                       )}
                     </span>
@@ -122,14 +122,14 @@ export default function Calendar() {
               <span className="calendar-dot calendar-dot--gold" /> Priorités
             </span>
             <span>
-              <span className="calendar-dot calendar-dot--sage" /> Habitudes ✓
+              <span className="calendar-dot calendar-dot--sage" /> Rituels ✓
             </span>
           </div>
         </div>
 
         <p className="empty-hint calendar-hint">
           Touche un jour pour voir son planning, ses priorités et ses
-          habitudes.
+          rituels.
         </p>
       </div>
     </>

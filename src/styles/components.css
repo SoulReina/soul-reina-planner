@@ -65,6 +65,29 @@
   color: #7a5f1c;
 }
 
+.pill-urgent {
+  background: rgba(179, 85, 74, 0.16);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+}
+
+.pill-important {
+  background: rgba(201, 166, 84, 0.18);
+  border: 1px solid var(--color-gold);
+  color: #7a5f1c;
+}
+
+.pill-a_faire {
+  background: rgba(23, 20, 15, 0.06);
+  border: 1px solid rgba(23, 20, 15, 0.18);
+  color: var(--color-muted);
+}
+
+select.pill {
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
 .btn {
   border: none;
   border-radius: var(--radius-pill);
@@ -156,6 +179,11 @@
 
 .inline-form .input {
   flex: 1;
+}
+
+.inline-form .priorities-level-select {
+  flex: 0 0 auto;
+  width: auto;
 }
 
 .priority-list,

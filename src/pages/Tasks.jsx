@@ -1,6 +1,10 @@
 import { useMemo, useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import { usePriorities } from '../context/PrioritiesContext'
+import {
+  PRIORITY_LEVELS,
+  PRIORITY_LEVEL_LABELS,
+} from '../lib/data/priorities'
 import { PlusIcon, TrashIcon } from '../components/icons'
 import { todayISO, formatShortDateFR } from '../utils/date'
 import './Tasks.css'
@@ -13,11 +17,18 @@ const FILTERS = [
 ]
 
 export default function Tasks() {
-  const { priorities, loading, addPriority, togglePriority, removePriority } =
-    usePriorities()
+  const {
+    priorities,
+    loading,
+    addPriority,
+    togglePriority,
+    updatePriorityLevel,
+    removePriority,
+  } = usePriorities()
   const [filter, setFilter] = useState('today')
   const [draft, setDraft] = useState('')
   const [draftDate, setDraftDate] = useState(todayISO())
+  const [draftLevel, setDraftLevel] = useState('a_faire')
   const today = todayISO()
 
   const filtered = useMemo(() => {
@@ -36,36 +47,54 @@ export default function Tasks() {
     }
   }, [priorities, filter, today])
 
-  const grouped = useMemo(() => {
-    if (filter === 'today') return null
-    const map = new Map()
+  const byLevel = useMemo(() => {
+    const map = new Map(PRIORITY_LEVELS.map((l) => [l, []]))
     filtered.forEach((item) => {
-      if (!map.has(item.date)) map.set(item.date, [])
-      map.get(item.date).push(item)
+      const level = PRIORITY_LEVELS.includes(item.level) ? item.level : 'a_faire'
+      map.get(level).push(item)
     })
     return map
-  }, [filtered, filter])
+  }, [filtered])
 
   async function handleAdd(e) {
     e.preventDefault()
     const content = draft.trim()
     if (!content) return
     setDraft('')
-    await addPriority(draftDate, content)
+    await addPriority(draftDate, content, draftLevel)
   }
 
   function renderItem(item) {
     return (
-      <li key={item.id} className="checkbox-row">
+      <li key={item.id} className="checkbox-row task-row">
         <input
           type="checkbox"
           checked={item.is_done}
           onChange={() => togglePriority(item)}
           aria-label={`Marquer "${item.content}" comme fait`}
         />
-        <span className={'row-text' + (item.is_done ? ' done' : '')}>
-          {item.content}
-        </span>
+        <div className="task-row__body">
+          <span className={'row-text' + (item.is_done ? ' done' : '')}>
+            {item.content}
+          </span>
+          {filter !== 'today' && (
+            <span className="task-row__date">
+              {item.date === today ? 'Aujourd’hui' : formatShortDateFR(item.date)}
+            </span>
+          )}
+        </div>
+        <select
+          className={'pill pill-' + item.level}
+          value={item.level}
+          onChange={(e) => updatePriorityLevel(item.id, e.target.value)}
+          aria-label={`Niveau de "${item.content}"`}
+        >
+          {PRIORITY_LEVELS.map((l) => (
+            <option key={l} value={l}>
+              {PRIORITY_LEVEL_LABELS[l]}
+            </option>
+          ))}
+        </select>
         <button
           type="button"
           className="btn btn-ghost btn-icon"
@@ -83,7 +112,7 @@ export default function Tasks() {
       <PageHeader
         eyebrow="À faire"
         title="Tâches"
-        subtitle="Toutes tes priorités, jour par jour"
+        subtitle="Classées par niveau de priorité"
       />
       <div className="page-content">
         <div className="card">
@@ -104,19 +133,22 @@ export default function Tasks() {
             <p className="empty-hint">Chargement…</p>
           ) : filtered.length === 0 ? (
             <p className="empty-hint">Rien ici pour l’instant.</p>
-          ) : grouped ? (
-            <div className="tasks-groups">
-              {Array.from(grouped.entries()).map(([date, items]) => (
-                <div key={date} className="tasks-group">
-                  <h3 className="tasks-group__date">
-                    {date === today ? 'Aujourd’hui' : formatShortDateFR(date)}
-                  </h3>
-                  <ul className="priority-list">{items.map(renderItem)}</ul>
-                </div>
-              ))}
-            </div>
           ) : (
-            <ul className="priority-list">{filtered.map(renderItem)}</ul>
+            <div className="tasks-groups">
+              {PRIORITY_LEVELS.map((level) => {
+                const items = byLevel.get(level)
+                if (!items || items.length === 0) return null
+                return (
+                  <div key={level} className="tasks-group">
+                    <h3 className="tasks-group__date">
+                      {PRIORITY_LEVEL_LABELS[level]}
+                      <span className="tasks-group__count">{items.length}</span>
+                    </h3>
+                    <ul className="priority-list">{items.map(renderItem)}</ul>
+                  </div>
+                )
+              })}
+            </div>
           )}
 
           <form className="tasks-form" onSubmit={handleAdd}>
@@ -128,6 +160,18 @@ export default function Tasks() {
               onChange={(e) => setDraft(e.target.value)}
             />
             <div className="tasks-form__row">
+              <select
+                className="input"
+                value={draftLevel}
+                onChange={(e) => setDraftLevel(e.target.value)}
+                aria-label="Niveau de la nouvelle tâche"
+              >
+                {PRIORITY_LEVELS.map((l) => (
+                  <option key={l} value={l}>
+                    {PRIORITY_LEVEL_LABELS[l]}
+                  </option>
+                ))}
+              </select>
               <input
                 className="input"
                 type="date"
