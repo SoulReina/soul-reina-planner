@@ -1,0 +1,123 @@
+.calendar-card {
+  padding: 16px 14px 20px;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 12px;
+}
+
+.calendar-nav__label {
+  font-size: 1.1rem;
+}
+
+.calendar-nav .btn-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-grid--head {
+  margin-bottom: 6px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding-bottom: 2px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  border: none;
+  background: rgba(23, 20, 15, 0.03);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--color-card-text);
+  font-family: var(--font-body);
+}
+
+.calendar-day__num {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.calendar-day.is-outside {
+  opacity: 0.32;
+}
+
+.calendar-day.is-today {
+  background: var(--color-pink);
+  border: 1px solid var(--color-pink-border);
+}
+
+.calendar-day.is-today .calendar-day__num {
+  font-weight: 700;
+}
+
+.calendar-day:active {
+  transform: scale(0.95);
+}
+
+.calendar-day__dots {
+  display: flex;
+  gap: 3px;
+  min-height: 6px;
+}
+
+.calendar-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.calendar-dot--pink {
+  background: var(--color-pink-border);
+}
+
+.calendar-dot--gold {
+  background: var(--color-gold);
+}
+
+.calendar-dot--sage {
+  background: #7a9a7a;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(23, 20, 15, 0.08);
+  font-size: 0.7rem;
+  color: var(--color-muted);
+}
+
+.calendar-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.calendar-hint {
+  margin-top: 14px;
+  text-align: center;
+}

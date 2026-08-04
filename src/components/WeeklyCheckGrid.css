@@ -1,0 +1,70 @@
+.weekly-grid-wrap {
+  overflow-x: auto;
+  margin: -2px -2px 0;
+  padding: 2px;
+}
+
+.weekly-grid {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 380px;
+}
+
+.weekly-grid__name-col {
+  width: 30%;
+}
+
+.weekly-grid__day-head {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 0 2px 6px;
+}
+
+.weekly-grid__day-head.is-today {
+  color: var(--color-card-text);
+}
+
+.weekly-grid__day-num {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.weekly-grid__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 8px 6px 8px 0;
+  white-space: nowrap;
+}
+
+.weekly-grid__icon {
+  font-size: 1rem;
+}
+
+.weekly-grid tr {
+  border-top: 1px solid rgba(23, 20, 15, 0.08);
+}
+
+.weekly-grid__cell {
+  text-align: center;
+  padding: 6px 2px;
+  border-radius: 8px;
+}
+
+.weekly-grid__cell.is-today {
+  background: rgba(217, 140, 160, 0.14);
+}
+
+.weekly-grid__cell input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-pink-border);
+}

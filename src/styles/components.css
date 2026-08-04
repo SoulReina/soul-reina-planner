@@ -1,0 +1,169 @@
+.page-content {
+  padding: 0 20px 24px;
+  flex: 1;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.card {
+  background: var(--color-card);
+  color: var(--color-card-text);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.card + .card {
+  margin-top: 16px;
+}
+
+.card-title {
+  font-family: var(--font-title);
+  font-style: italic;
+  font-size: 1.3rem;
+  margin: 0 0 14px;
+  color: var(--color-card-text);
+}
+
+.card-title small {
+  display: block;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: 2px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pill-salarie {
+  background: var(--color-pink);
+  border: 1px solid var(--color-pink-border);
+  color: #7a2f42;
+}
+
+.pill-solo {
+  background: rgba(201, 166, 84, 0.18);
+  border: 1px solid var(--color-gold);
+  color: #7a5f1c;
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--color-gold);
+  color: #1a1210;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--color-pink-border);
+  color: var(--color-card-text);
+  opacity: 0.6;
+}
+
+.btn-ghost:hover,
+.btn-ghost:active {
+  opacity: 1;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid rgba(23, 20, 15, 0.15);
+  background: #fffdf8;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  color: var(--color-card-text);
+}
+
+.input:focus {
+  outline: 2px solid var(--color-pink-border);
+  outline-offset: 1px;
+}
+
+.empty-hint {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-row input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-pink-border);
+  flex-shrink: 0;
+}
+
+.row-text {
+  flex: 1;
+  font-size: 0.92rem;
+}
+
+.row-text.done {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.inline-form .input {
+  flex: 1;
+}
+
+.priority-list,
+.schedule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

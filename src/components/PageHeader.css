@@ -1,0 +1,27 @@
+.page-header {
+  padding: 28px 20px 18px;
+}
+
+.page-header__eyebrow {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 6px;
+}
+
+.page-header__back {
+  text-decoration: none;
+}
+
+.page-header__back:hover {
+  text-decoration: underline;
+}
+
+.page-header__subtitle {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: rgba(244, 238, 225, 0.6);
+}

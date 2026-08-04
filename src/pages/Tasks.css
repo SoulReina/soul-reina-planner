@@ -1,0 +1,57 @@
+.tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  padding-bottom: 2px;
+}
+
+.tabs__btn {
+  flex-shrink: 0;
+  border: 1px solid rgba(23, 20, 15, 0.15);
+  background: transparent;
+  border-radius: var(--radius-pill);
+  padding: 7px 14px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-card-text);
+  opacity: 0.6;
+}
+
+.tabs__btn.is-active {
+  background: var(--color-pink);
+  border-color: var(--color-pink-border);
+  opacity: 1;
+}
+
+.tasks-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tasks-group__date {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 8px;
+}
+
+.tasks-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tasks-form__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tasks-form__row .input {
+  flex: 1;
+}
