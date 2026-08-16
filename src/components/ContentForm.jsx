@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { PlusIcon, CheckIcon } from './icons'
+import PlatformIcon from './PlatformIcon'
 import {
   CONTENT_STATUSES,
   CONTENT_STATUS_LABELS,
@@ -10,7 +11,7 @@ export const CUSTOM_PLATFORM = '__custom__'
 
 export const EMPTY_CONTENT_FORM = {
   title: '',
-  platform: CONTENT_PLATFORM_FAVORITES[0],
+  platforms: [CONTENT_PLATFORM_FAVORITES[0]],
   customPlatform: '',
   status: 'idee',
   date: '',
@@ -25,7 +26,7 @@ export function contentItemToFormValues(item) {
   const isFavorite = CONTENT_PLATFORM_FAVORITES.includes(item.platform)
   return {
     title: item.title || '',
-    platform: isFavorite ? item.platform : CUSTOM_PLATFORM,
+    platforms: [isFavorite ? item.platform : CUSTOM_PLATFORM],
     customPlatform: isFavorite ? '' : item.platform || '',
     status: item.status,
     date: item.date || '',
@@ -43,27 +44,43 @@ export default function ContentForm({
   onCancel,
   submitLabel,
   resetOnSubmit,
+  allowMultiplePlatforms,
 }) {
   const [form, setForm] = useState(initialValues)
+
+  function togglePlatform(p) {
+    setForm((f) => {
+      const has = f.platforms.includes(p)
+      const platforms = has ? f.platforms.filter((x) => x !== p) : [...f.platforms, p]
+      return { ...f, platforms }
+    })
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
     const title = form.title.trim()
     if (!title) return
-    const platform =
-      form.platform === CUSTOM_PLATFORM ? form.customPlatform.trim() : form.platform
-    if (!platform) return
-    await onSubmit({
-      title,
-      platform,
-      status: form.status,
-      date: form.date || null,
-      publish_time: form.publishTime || null,
-      body: form.body.trim() || null,
-      cta: form.cta.trim() || null,
-      description: form.description.trim() || null,
-      notes: form.notes.trim() || null,
-    })
+    const platforms = [
+      ...new Set(
+        form.platforms
+          .map((p) => (p === CUSTOM_PLATFORM ? form.customPlatform.trim() : p))
+          .filter(Boolean)
+      ),
+    ]
+    if (platforms.length === 0) return
+    await onSubmit(
+      platforms.map((platform) => ({
+        title,
+        platform,
+        status: form.status,
+        date: form.date || null,
+        publish_time: form.publishTime || null,
+        body: form.body.trim() || null,
+        cta: form.cta.trim() || null,
+        description: form.description.trim() || null,
+        notes: form.notes.trim() || null,
+      }))
+    )
     if (resetOnSubmit) setForm(initialValues)
   }
 
@@ -81,11 +98,33 @@ export default function ContentForm({
         value={form.title}
         onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
       />
-      <div className="content-form__row">
+      {allowMultiplePlatforms ? (
+        <div className="content-form__platforms">
+          {CONTENT_PLATFORM_FAVORITES.map((p) => (
+            <label key={p} className="content-form__platform-option">
+              <input
+                type="checkbox"
+                checked={form.platforms.includes(p)}
+                onChange={() => togglePlatform(p)}
+              />
+              <PlatformIcon platform={p} width={13} height={13} />
+              {p}
+            </label>
+          ))}
+          <label className="content-form__platform-option">
+            <input
+              type="checkbox"
+              checked={form.platforms.includes(CUSTOM_PLATFORM)}
+              onChange={() => togglePlatform(CUSTOM_PLATFORM)}
+            />
+            Autre
+          </label>
+        </div>
+      ) : (
         <select
           className="input"
-          value={form.platform}
-          onChange={(e) => setForm((f) => ({ ...f, platform: e.target.value }))}
+          value={form.platforms[0]}
+          onChange={(e) => setForm((f) => ({ ...f, platforms: [e.target.value] }))}
         >
           {CONTENT_PLATFORM_FAVORITES.map((p) => (
             <option key={p} value={p}>
@@ -94,19 +133,8 @@ export default function ContentForm({
           ))}
           <option value={CUSTOM_PLATFORM}>Autre (personnalisé)…</option>
         </select>
-        <select
-          className="input"
-          value={form.status}
-          onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
-        >
-          {CONTENT_STATUSES.map((s) => (
-            <option key={s} value={s}>
-              {CONTENT_STATUS_LABELS[s]}
-            </option>
-          ))}
-        </select>
-      </div>
-      {form.platform === CUSTOM_PLATFORM && (
+      )}
+      {form.platforms.includes(CUSTOM_PLATFORM) && (
         <input
           className="input"
           type="text"
@@ -115,6 +143,17 @@ export default function ContentForm({
           onChange={(e) => setForm((f) => ({ ...f, customPlatform: e.target.value }))}
         />
       )}
+      <select
+        className="input"
+        value={form.status}
+        onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
+      >
+        {CONTENT_STATUSES.map((s) => (
+          <option key={s} value={s}>
+            {CONTENT_STATUS_LABELS[s]}
+          </option>
+        ))}
+      </select>
       <div className="content-form__row">
         <input
           className="input"

@@ -66,12 +66,12 @@ export default function Content() {
     [items, today]
   )
 
-  async function handleAdd(payload) {
-    await addItem(payload)
+  async function handleAdd(payloads) {
+    await Promise.all(payloads.map((payload) => addItem(payload)))
   }
 
-  async function handleEditSubmit(id, payload) {
-    await patchItem(id, payload)
+  async function handleEditSubmit(id, payloads) {
+    await patchItem(id, payloads[0])
     setEditingId(null)
   }
 
@@ -229,6 +229,7 @@ export default function Content() {
             onSubmit={handleAdd}
             submitLabel="Enregistrer"
             resetOnSubmit
+            allowMultiplePlatforms
           />
         </div>
       </div>
