@@ -1,8 +1,12 @@
 import { useParams, Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
-import Priorities from '../features/today/Priorities'
+import DayNav from '../features/today/DayNav'
+import TasksToday from '../features/today/TasksToday'
+import RecurringTasksPlanner from '../features/today/RecurringTasksPlanner'
 import Schedule from '../features/today/Schedule'
+import ContentToday from '../features/today/ContentToday'
 import RitualTracker from '../features/today/RitualTracker'
+import Notebook from '../features/today/Notebook'
 import { todayISO, formatLongDateFR } from '../utils/date'
 import '../features/today/today.css'
 
@@ -27,10 +31,14 @@ export default function Today() {
         title={isToday ? 'Aujourd’hui' : formatLongDateFR(date).split(' ')[0]}
         subtitle={formatLongDateFR(date)}
       />
+      <DayNav date={date} />
       <div className="page-content">
-        <Priorities date={date} />
+        <TasksToday date={date} />
+        <RecurringTasksPlanner />
         <Schedule date={date} />
+        <ContentToday date={date} />
         <RitualTracker date={date} />
+        <Notebook />
       </div>
     </>
   )

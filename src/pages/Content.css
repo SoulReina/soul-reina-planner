@@ -68,6 +68,33 @@
   color: var(--color-muted);
 }
 
+.content-item__cta {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-card-text);
+}
+
+.content-item__details {
+  margin-top: 8px;
+  font-size: 0.8rem;
+}
+
+.content-item__details summary {
+  cursor: pointer;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.content-item__details p {
+  margin-top: 6px;
+  color: var(--color-card-text);
+  white-space: pre-wrap;
+}
+
 .content-item__status {
   margin-top: 10px;
   font-size: 0.78rem;

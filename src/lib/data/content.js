@@ -12,14 +12,7 @@ export const CONTENT_STATUS_LABELS = {
   publie: 'Publié',
 }
 
-export const CONTENT_PLATFORMS = [
-  'Instagram',
-  'TikTok',
-  'YouTube',
-  'Blog',
-  'Newsletter',
-  'Autre',
-]
+export const CONTENT_PLATFORM_FAVORITES = ['TikTok', 'Instagram', 'Facebook', 'Threads']
 
 export async function fetchAllContentItems() {
   if (isSupabaseConfigured) {

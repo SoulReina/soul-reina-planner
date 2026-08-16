@@ -42,10 +42,12 @@ export function addMonths(isoDate, amount) {
 }
 
 // Monday-based weekday index: 0 = Monday ... 6 = Sunday
-function mondayIndex(isoDate) {
+export function weekdayIndex(isoDate) {
   const d = new Date(`${isoDate}T00:00:00`)
   return (d.getDay() + 6) % 7
 }
+
+const mondayIndex = weekdayIndex
 
 export function startOfWeek(isoDate) {
   return addDays(isoDate, -mondayIndex(isoDate))

@@ -1,0 +1,129 @@
+.chart {
+  margin-top: 8px;
+}
+
+.chart__year-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.chart__year-label {
+  font-family: var(--font-title);
+  font-style: italic;
+  font-size: 1.05rem;
+  min-width: 3.5ch;
+  text-align: center;
+}
+
+.bar-chart {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  height: 170px;
+  padding-top: 4px;
+}
+
+.bar-chart__baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(23, 20, 15, 0.18);
+}
+
+.bar-chart__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar-chart__track {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.bar-chart__bar {
+  position: absolute;
+  width: 60%;
+  max-width: 22px;
+  border-radius: 4px 4px 0 0;
+}
+
+.bar-chart__bar.is-negative {
+  border-radius: 0 0 4px 4px;
+}
+
+.bar-chart__label {
+  margin-top: 6px;
+  font-size: 0.6rem;
+  color: var(--color-muted);
+  letter-spacing: 0.02em;
+}
+
+.pie-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.pie-chart__svg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+}
+
+.pie-chart__slice-label {
+  font-size: 5px;
+  font-weight: 600;
+  fill: #fff;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 0.6px;
+}
+
+.pie-chart__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pie-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.pie-chart__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.pie-chart__legend-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pie-chart__legend-value {
+  color: var(--color-muted);
+  white-space: nowrap;
+}

@@ -11,7 +11,8 @@ Mon appli planner personnelle — React + Vite, connectée à Supabase.
 
 ## Onglets
 
-Aujourd'hui · Calendrier · Tâches · Rituels · Contenu (navigation basse)
+Aujourd'hui · Calendrier · Tâches · Rituels · Contenu · Budget · Économies · Business · To Do Liste
+(navigation basse)
 
 ## Setup
 

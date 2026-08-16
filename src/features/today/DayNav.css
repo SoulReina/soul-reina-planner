@@ -1,0 +1,74 @@
+.day-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 20px 18px;
+}
+
+.day-nav__arrow {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 238, 225, 0.18);
+  background: transparent;
+  color: var(--color-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.day-nav__arrow:disabled {
+  opacity: 0.25;
+}
+
+.day-nav__strip {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.day-nav__strip::-webkit-scrollbar {
+  display: none;
+}
+
+.day-nav__chip {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 42px;
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(244, 238, 225, 0.14);
+  background: rgba(244, 238, 225, 0.04);
+  color: rgba(244, 238, 225, 0.65);
+}
+
+.day-nav__chip.is-today {
+  border-color: var(--color-gold);
+}
+
+.day-nav__chip.is-active {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: #1a1210;
+}
+
+.day-nav__chip-weekday {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.day-nav__chip-num {
+  font-family: var(--font-title);
+  font-style: italic;
+  font-size: 1rem;
+}

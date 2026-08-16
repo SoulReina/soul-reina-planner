@@ -5,6 +5,10 @@ import {
   CheckIcon,
   SparkleIcon,
   FeatherIcon,
+  WalletIcon,
+  PiggyBankIcon,
+  BriefcaseIcon,
+  ListIcon,
 } from './icons'
 import './BottomNav.css'
 
@@ -14,6 +18,10 @@ const TABS = [
   { to: '/taches', label: 'Tâches', Icon: CheckIcon },
   { to: '/rituels', label: 'Rituels', Icon: SparkleIcon },
   { to: '/contenu', label: 'Contenu', Icon: FeatherIcon },
+  { to: '/budget', label: 'Budget', Icon: WalletIcon },
+  { to: '/economies', label: 'Économies', Icon: PiggyBankIcon },
+  { to: '/business', label: 'Business', Icon: BriefcaseIcon },
+  { to: '/todo', label: 'To Do', Icon: ListIcon },
 ]
 
 export default function BottomNav() {

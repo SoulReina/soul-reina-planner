@@ -1,0 +1,5 @@
+.business-warning {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--color-danger);
+}

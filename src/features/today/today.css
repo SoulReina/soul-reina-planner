@@ -101,3 +101,81 @@
   opacity: 1;
 }
 
+/* Recurring tasks */
+
+.task-recurring-mark {
+  color: var(--color-gold);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.recurring-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recurring-form__weekdays {
+  display: flex;
+  gap: 6px;
+}
+
+.recurring-form__day {
+  flex: 1;
+  border: 1px solid rgba(23, 20, 15, 0.15);
+  background: transparent;
+  border-radius: var(--radius-pill);
+  padding: 7px 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-card-text);
+  opacity: 0.55;
+}
+
+.recurring-form__day.is-active {
+  background: rgba(201, 166, 84, 0.25);
+  border-color: var(--color-gold);
+  opacity: 1;
+}
+
+/* Content today */
+
+.content-today-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content-today-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.content-today-item__time {
+  font-family: var(--font-title);
+  font-style: italic;
+  font-size: 0.95rem;
+  min-width: 42px;
+}
+
+.content-today-item__title {
+  flex: 1;
+  font-size: 0.88rem;
+}
+
+.content-today__link {
+  text-decoration: underline;
+}
+
+/* Notebook */
+
+.notebook-textarea {
+  resize: vertical;
+  font-family: var(--font-body);
+}
+
