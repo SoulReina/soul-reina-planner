@@ -4,16 +4,10 @@ import { useSavings } from '../context/SavingsContext'
 import { useBudget } from '../context/BudgetContext'
 import { PlusIcon, TrashIcon } from '../components/icons'
 import { todayISO, formatMonthLabelFR, addMonths } from '../utils/date'
+import { formatXPF, toXPFAmount } from '../utils/currency'
 import { colorForIndex } from '../lib/palette'
 import PieChart from '../components/charts/PieChart'
 import './Savings.css'
-
-function formatEUR(amount) {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(amount || 0)
-}
 
 function monthKeyOf(cursor) {
   return `${cursor.slice(0, 7)}-01`
@@ -26,7 +20,7 @@ function EnvelopeCard({ envelope, movements, onMovement, onRemove }) {
   const progress = goal ? Math.min(100, Math.round((current / goal) * 100)) : null
 
   async function handleMovement(sign) {
-    const value = Number(amount)
+    const value = toXPFAmount(amount)
     if (!value || value <= 0) return
     setAmount('')
     await onMovement(envelope, sign * value)
@@ -47,8 +41,8 @@ function EnvelopeCard({ envelope, movements, onMovement, onRemove }) {
       </div>
 
       <div className="envelope-amount">
-        {formatEUR(current)}
-        {goal !== null && <span className="envelope-amount__goal"> / {formatEUR(goal)}</span>}
+        {formatXPF(current)}
+        {goal !== null && <span className="envelope-amount__goal"> / {formatXPF(goal)}</span>}
       </div>
 
       {goal !== null && (
@@ -62,8 +56,8 @@ function EnvelopeCard({ envelope, movements, onMovement, onRemove }) {
           className="input"
           type="number"
           min="0"
-          step="0.01"
-          placeholder="Montant € ce mois-ci"
+          step="1"
+          placeholder="Montant (F) ce mois-ci"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
@@ -87,7 +81,7 @@ function EnvelopeCard({ envelope, movements, onMovement, onRemove }) {
               <li key={m.id}>
                 <span className={Number(m.amount) >= 0 ? 'is-positive' : 'is-negative'}>
                   {Number(m.amount) >= 0 ? '+' : ''}
-                  {formatEUR(m.amount)}
+                  {formatXPF(m.amount)}
                 </span>
                 <span className="envelope-history__date">
                   {new Date(m.created_at).toLocaleDateString('fr-FR')}
@@ -152,7 +146,7 @@ export default function Savings() {
     if (!trimmed) return
     setName('')
     setGoal('')
-    await addEnvelope(trimmed, goal ? Number(goal) : null)
+    await addEnvelope(trimmed, goal ? toXPFAmount(goal) : null)
   }
 
   return (
@@ -183,12 +177,12 @@ export default function Savings() {
             <div className="budget-summary__stat">
               <span className="budget-summary__label">Reste à vivre net</span>
               <span className="budget-summary__value budget-summary__value--net">
-                {formatEUR(disponible)}
+                {formatXPF(disponible)}
               </span>
             </div>
             <div className="budget-summary__stat">
               <span className="budget-summary__label">Déjà réparti</span>
-              <span className="budget-summary__value">{formatEUR(distribuedCeMois)}</span>
+              <span className="budget-summary__value">{formatXPF(distribuedCeMois)}</span>
             </div>
             <div className="budget-summary__stat">
               <span className="budget-summary__label">Restant à répartir</span>
@@ -198,7 +192,7 @@ export default function Savings() {
                   (restantARepartir < 0 ? ' budget-summary__value--depense' : ' budget-summary__value--revenu')
                 }
               >
-                {formatEUR(restantARepartir)}
+                {formatXPF(restantARepartir)}
               </span>
             </div>
           </div>
@@ -210,7 +204,7 @@ export default function Savings() {
               Répartition
               <small>Totaux cumulés par enveloppe</small>
             </h2>
-            <PieChart data={pieData} formatValue={formatEUR} />
+            <PieChart data={pieData} formatValue={formatXPF} />
           </div>
         )}
 
@@ -252,8 +246,8 @@ export default function Savings() {
                 className="input"
                 type="number"
                 min="0"
-                step="0.01"
-                placeholder="Objectif € (optionnel)"
+                step="1"
+                placeholder="Objectif (F) (optionnel)"
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
               />

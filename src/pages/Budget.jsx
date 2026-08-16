@@ -3,15 +3,9 @@ import PageHeader from '../components/PageHeader'
 import { useBudget } from '../context/BudgetContext'
 import { PlusIcon, TrashIcon } from '../components/icons'
 import { todayISO, formatMonthLabelFR, addMonths } from '../utils/date'
+import { formatXPF, toXPFAmount } from '../utils/currency'
 import BarChart, { monthlyBarData } from '../components/charts/BarChart'
 import './Budget.css'
-
-function formatEUR(amount) {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(amount || 0)
-}
 
 function monthKeyOf(cursor) {
   return `${cursor.slice(0, 7)}-01`
@@ -25,12 +19,13 @@ function InlineAmount({ value, onCommit, placeholder }) {
   }, [value])
 
   function commit() {
-    const num = Number(draft)
-    if (draft === '' || Number.isNaN(num)) {
+    if (draft === '' || Number.isNaN(Number(draft))) {
       setDraft(value ?? '')
       return
     }
+    const num = toXPFAmount(draft)
     if (num !== Number(value ?? 0)) onCommit(num)
+    else setDraft(num)
   }
 
   return (
@@ -38,7 +33,7 @@ function InlineAmount({ value, onCommit, placeholder }) {
       className="input budget-inline-amount"
       type="number"
       min="0"
-      step="0.01"
+      step="1"
       placeholder={placeholder}
       value={draft}
       onChange={(e) => setDraft(e.target.value)}
@@ -54,7 +49,7 @@ function SalaryRow({ monthKey }) {
   return (
     <div className="budget-row">
       <span className="budget-row__label">Salaire</span>
-      <InlineAmount value={amount} onCommit={(v) => setMonthSalary(monthKey, v)} placeholder="Montant €" />
+      <InlineAmount value={amount} onCommit={(v) => setMonthSalary(monthKey, v)} placeholder="Montant (F)" />
     </div>
   )
 }
@@ -70,7 +65,7 @@ function IncomeList({ monthKey, category, title }) {
   async function handleAdd(e) {
     e.preventDefault()
     const trimmed = label.trim()
-    const num = Number(amount)
+    const num = toXPFAmount(amount)
     if (!trimmed || !num || num <= 0) return
     await addIncomeEntry({
       month: monthKey,
@@ -96,7 +91,7 @@ function IncomeList({ monthKey, category, title }) {
                 {e.note && <span className="budget-entry__note">{e.note}</span>}
               </div>
               <span className="budget-entry__amount budget-entry__amount--revenu">
-                +{formatEUR(e.amount)}
+                +{formatXPF(e.amount)}
               </span>
               <button
                 type="button"
@@ -130,8 +125,8 @@ function IncomeList({ monthKey, category, title }) {
             className="input"
             type="number"
             min="0"
-            step="0.01"
-            placeholder="Montant €"
+            step="1"
+            placeholder="Montant (F)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
@@ -153,7 +148,7 @@ function FixedCharges({ monthKey }) {
   async function handleAdd(e) {
     e.preventDefault()
     const trimmed = name.trim()
-    const num = Number(amount)
+    const num = toXPFAmount(amount)
     if (!trimmed || !num || num <= 0) return
     const template = await addFixedTemplate(trimmed, num)
     await setFixedEntry(template.id, monthKey, num)
@@ -179,7 +174,7 @@ function FixedCharges({ monthKey }) {
                 <InlineAmount
                   value={entry?.amount ?? t.amount}
                   onCommit={(v) => setFixedEntry(t.id, monthKey, v)}
-                  placeholder="Montant €"
+                  placeholder="Montant (F)"
                 />
                 <button
                   type="button"
@@ -207,8 +202,8 @@ function FixedCharges({ monthKey }) {
             className="input"
             type="number"
             min="0"
-            step="0.01"
-            placeholder="Montant €"
+            step="1"
+            placeholder="Montant (F)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
@@ -258,14 +253,14 @@ function VariableCharges({ monthKey }) {
                 <span className="budget-entry__label budget-entry__label--grow">{t.name}</span>
                 <InlineAmount
                   value={entry?.estimated ?? ''}
-                  placeholder="Estimé €"
+                  placeholder="Estimé (F)"
                   onCommit={(v) =>
                     setVariableEntry(t.id, monthKey, { estimated: v, actual: entry?.actual ?? null })
                   }
                 />
                 <InlineAmount
                   value={entry?.actual ?? ''}
-                  placeholder="Réel €"
+                  placeholder="Réel (F)"
                   onCommit={(v) =>
                     setVariableEntry(t.id, monthKey, {
                       estimated: entry?.estimated ?? 0,
@@ -312,7 +307,7 @@ function ExceptionalExpenses({ monthKey }) {
   async function handleAdd(e) {
     e.preventDefault()
     const trimmed = label.trim()
-    const num = Number(amount)
+    const num = toXPFAmount(amount)
     if (!trimmed || !num || num <= 0) return
     await addExceptionalExpense({ month: monthKey, label: trimmed, amount: num })
     setLabel('')
@@ -333,7 +328,7 @@ function ExceptionalExpenses({ monthKey }) {
             <li key={e.id} className="budget-entry">
               <span className="budget-entry__label budget-entry__label--grow">{e.label}</span>
               <span className="budget-entry__amount budget-entry__amount--depense">
-                −{formatEUR(e.amount)}
+                −{formatXPF(e.amount)}
               </span>
               <button
                 type="button"
@@ -360,8 +355,8 @@ function ExceptionalExpenses({ monthKey }) {
             className="input"
             type="number"
             min="0"
-            step="0.01"
-            placeholder="Montant €"
+            step="1"
+            placeholder="Montant (F)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
@@ -383,7 +378,7 @@ function Debts() {
   async function handleAdd(e) {
     e.preventDefault()
     const trimmed = label.trim()
-    const num = Number(amount)
+    const num = toXPFAmount(amount)
     if (!trimmed || !num || num <= 0) return
     await addDebt({ label: trimmed, amount: num, note: note.trim() || null })
     setLabel('')
@@ -440,8 +435,8 @@ function Debts() {
             className="input"
             type="number"
             min="0"
-            step="0.01"
-            placeholder="Montant restant €"
+            step="1"
+            placeholder="Montant restant (F)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
@@ -533,37 +528,37 @@ export default function Budget() {
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Revenus</span>
                   <span className="budget-summary__value budget-summary__value--revenu">
-                    {formatEUR(summary.totalRevenus)}
+                    {formatXPF(summary.totalRevenus)}
                   </span>
                 </div>
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Charges</span>
                   <span className="budget-summary__value budget-summary__value--depense">
-                    {formatEUR(summary.totalCharges)}
+                    {formatXPF(summary.totalCharges)}
                   </span>
                 </div>
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Except.</span>
                   <span className="budget-summary__value budget-summary__value--depense">
-                    {formatEUR(summary.totalExceptional)}
+                    {formatXPF(summary.totalExceptional)}
                   </span>
                 </div>
               </div>
               <div className="budget-summary budget-summary--secondary">
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Reste à vivre</span>
-                  <span className="budget-summary__value">{formatEUR(summary.resteAVivre)}</span>
+                  <span className="budget-summary__value">{formatXPF(summary.resteAVivre)}</span>
                 </div>
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Dettes</span>
                   <span className="budget-summary__value budget-summary__value--depense">
-                    {formatEUR(summary.totalDebts)}
+                    {formatXPF(summary.totalDebts)}
                   </span>
                 </div>
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Reste à vivre net</span>
                   <span className="budget-summary__value budget-summary__value--net">
-                    {formatEUR(summary.resteAVivreNet)}
+                    {formatXPF(summary.resteAVivreNet)}
                   </span>
                 </div>
               </div>
@@ -580,7 +575,7 @@ export default function Budget() {
                 onYearChange={setChartYear}
                 minYear={currentYear - 5}
                 maxYear={currentYear}
-                formatValue={formatEUR}
+                formatValue={formatXPF}
               />
             </div>
 
@@ -595,7 +590,7 @@ export default function Budget() {
                 onYearChange={setChartYear}
                 minYear={currentYear - 5}
                 maxYear={currentYear}
-                formatValue={formatEUR}
+                formatValue={formatXPF}
               />
             </div>
           </>

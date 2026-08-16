@@ -3,14 +3,8 @@ import PageHeader from '../components/PageHeader'
 import { useSavings } from '../context/SavingsContext'
 import { useBusiness } from '../context/BusinessContext'
 import { PlusIcon, TrashIcon } from '../components/icons'
+import { formatXPF, toXPFAmount } from '../utils/currency'
 import './Business.css'
-
-function formatEUR(amount) {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(amount || 0)
-}
 
 export default function Business() {
   const { getEnvelopeBySlug, loading: savingsLoading } = useSavings()
@@ -29,7 +23,7 @@ export default function Business() {
   async function handleAdd(e) {
     e.preventDefault()
     const trimmed = name.trim()
-    const num = Number(amount)
+    const num = toXPFAmount(amount)
     if (!trimmed || !num || num <= 0) return
     setName('')
     setAmount('')
@@ -53,11 +47,11 @@ export default function Business() {
             </p>
           ) : (
             <>
-              <div className="envelope-amount">{formatEUR(total)}</div>
+              <div className="envelope-amount">{formatXPF(total)}</div>
               <div className="budget-summary budget-summary--secondary">
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Alloué</span>
-                  <span className="budget-summary__value">{formatEUR(allocated)}</span>
+                  <span className="budget-summary__value">{formatXPF(allocated)}</span>
                 </div>
                 <div className="budget-summary__stat">
                   <span className="budget-summary__label">Non alloué</span>
@@ -67,7 +61,7 @@ export default function Business() {
                       (remaining < 0 ? ' budget-summary__value--depense' : ' budget-summary__value--revenu')
                     }
                   >
-                    {formatEUR(remaining)}
+                    {formatXPF(remaining)}
                   </span>
                 </div>
               </div>
@@ -94,7 +88,7 @@ export default function Business() {
               {envelopes.map((e) => (
                 <li key={e.id} className="budget-entry">
                   <span className="budget-entry__label budget-entry__label--grow">{e.name}</span>
-                  <span className="budget-entry__amount">{formatEUR(e.amount)}</span>
+                  <span className="budget-entry__amount">{formatXPF(e.amount)}</span>
                   <button
                     type="button"
                     className="btn btn-ghost btn-icon"
@@ -120,8 +114,8 @@ export default function Business() {
                 className="input"
                 type="number"
                 min="0"
-                step="0.01"
-                placeholder="Montant à allouer €"
+                step="1"
+                placeholder="Montant à allouer (F)"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
