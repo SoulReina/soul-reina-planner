@@ -146,6 +146,15 @@ export function ThreadsIcon(props) {
   )
 }
 
+export function PencilIcon(props) {
+  return (
+    <svg {...common} {...props}>
+      <path d="M4 20l.9-4 11-11a1.9 1.9 0 0 1 2.7 0l.4.4a1.9 1.9 0 0 1 0 2.7l-11 11-4 .9z" />
+      <path d="M13.8 6l4.2 4.2" />
+    </svg>
+  )
+}
+
 export function GlobeIcon(props) {
   return (
     <svg {...common} {...props}>
