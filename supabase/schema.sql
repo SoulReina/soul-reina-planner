@@ -332,4 +332,3 @@ create policy "public access" on budget_variable_charge_entries for all using (t
 create policy "public access" on budget_exceptional_expenses for all using (true) with check (true);
 create policy "public access" on debts for all using (true) with check (true);
 create policy "public access" on business_envelopes for all using (true) with check (true);
-
