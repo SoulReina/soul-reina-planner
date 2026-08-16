@@ -19,11 +19,11 @@ function InlineAmount({ value, onCommit, placeholder }) {
   }, [value])
 
   function commit() {
-    if (draft === '' || Number.isNaN(Number(draft))) {
+    if (Number.isNaN(Number(draft))) {
       setDraft(value ?? '')
       return
     }
-    const num = toXPFAmount(draft)
+    const num = draft === '' ? 0 : toXPFAmount(draft)
     if (num !== Number(value ?? 0)) onCommit(num)
     else setDraft(num)
   }
@@ -43,13 +43,21 @@ function InlineAmount({ value, onCommit, placeholder }) {
 }
 
 function SalaryRow({ monthKey }) {
-  const { salary, setMonthSalary } = useBudget()
+  const { salary, setMonthSalary, removeMonthSalary } = useBudget()
   const amount = salary.find((s) => s.month === monthKey)?.amount ?? 0
 
   return (
     <div className="budget-row">
       <span className="budget-row__label">Salaire</span>
       <InlineAmount value={amount} onCommit={(v) => setMonthSalary(monthKey, v)} placeholder="Montant (F)" />
+      <button
+        type="button"
+        className="btn btn-ghost btn-icon"
+        onClick={() => removeMonthSalary(monthKey)}
+        aria-label="Supprimer le salaire"
+      >
+        <TrashIcon width={14} height={14} />
+      </button>
     </div>
   )
 }

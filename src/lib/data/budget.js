@@ -46,6 +46,18 @@ export async function setSalaryMonth(month, amount) {
   return record
 }
 
+export async function deleteSalaryMonth(month) {
+  if (isSupabaseConfigured) {
+    const { error } = await supabase.from('budget_salary').delete().eq('month', month)
+    if (error) throw error
+    return
+  }
+  writeAll(
+    SALARY_KEY,
+    readAll(SALARY_KEY).filter((s) => s.month !== month)
+  )
+}
+
 // Revenus Business / Exceptions ------------------------------------------
 
 export async function fetchAllIncomeEntries() {

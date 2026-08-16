@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback, useMemo } 
 import {
   fetchAllSalary,
   setSalaryMonth,
+  deleteSalaryMonth,
   fetchAllIncomeEntries,
   createIncomeEntry,
   deleteIncomeEntry,
@@ -84,6 +85,11 @@ export function BudgetProvider({ children }) {
       return exists ? prev.map((s) => (s.month === month ? record : s)) : [...prev, record]
     })
     return record
+  }, [])
+
+  const removeMonthSalary = useCallback(async (month) => {
+    setSalary((prev) => prev.filter((s) => s.month !== month))
+    await deleteSalaryMonth(month)
   }, [])
 
   const addIncomeEntry = useCallback(async (entry) => {
@@ -236,6 +242,7 @@ export function BudgetProvider({ children }) {
       exceptionalExpenses,
       debts,
       setMonthSalary,
+      removeMonthSalary,
       addIncomeEntry,
       removeIncomeEntry,
       addFixedTemplate,
@@ -263,6 +270,7 @@ export function BudgetProvider({ children }) {
       exceptionalExpenses,
       debts,
       setMonthSalary,
+      removeMonthSalary,
       addIncomeEntry,
       removeIncomeEntry,
       addFixedTemplate,
