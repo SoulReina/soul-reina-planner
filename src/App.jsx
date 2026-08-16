@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
 import SupabaseBanner from './components/SupabaseBanner'
 import Today from './pages/Today'
@@ -9,7 +9,6 @@ import Content from './pages/Content'
 import Budget from './pages/Budget'
 import Savings from './pages/Savings'
 import Business from './pages/Business'
-import TodoList from './pages/TodoList'
 import { PrioritiesProvider } from './context/PrioritiesContext'
 import { ScheduleProvider } from './context/ScheduleContext'
 import { RitualsProvider } from './context/RitualsContext'
@@ -61,7 +60,7 @@ function App() {
             <Route path="/budget" element={<Budget />} />
             <Route path="/economies" element={<Savings />} />
             <Route path="/business" element={<Business />} />
-            <Route path="/todo" element={<TodoList />} />
+            <Route path="/todo" element={<Navigate to="/taches" replace />} />
           </Routes>
         </main>
         <BottomNav />

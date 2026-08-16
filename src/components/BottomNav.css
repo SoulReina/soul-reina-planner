@@ -3,14 +3,12 @@
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   background: #17140f;
   border-top: 1px solid rgba(244, 238, 225, 0.12);
-  padding: 8px 4px calc(env(safe-area-inset-bottom, 0px) + 8px);
+  padding: 6px 4px calc(env(safe-area-inset-bottom, 0px) + 6px);
   z-index: 20;
-  overflow-x: auto;
 }
 
 .bottom-nav__item {
@@ -18,12 +16,11 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  flex: 1;
   min-width: 0;
   padding: 6px 1px;
   text-decoration: none;
   color: rgba(244, 238, 225, 0.5);
-  font-size: 0.56rem;
+  font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.01em;
   white-space: nowrap;

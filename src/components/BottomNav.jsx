@@ -8,7 +8,6 @@ import {
   WalletIcon,
   PiggyBankIcon,
   BriefcaseIcon,
-  ListIcon,
 } from './icons'
 import './BottomNav.css'
 
@@ -21,7 +20,6 @@ const TABS = [
   { to: '/budget', label: 'Budget', Icon: WalletIcon },
   { to: '/economies', label: 'Économies', Icon: PiggyBankIcon },
   { to: '/business', label: 'Business', Icon: BriefcaseIcon },
-  { to: '/todo', label: 'To Do', Icon: ListIcon },
 ]
 
 export default function BottomNav() {
