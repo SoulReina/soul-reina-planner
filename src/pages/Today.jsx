@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import DayNav from '../features/today/DayNav'
 import TasksToday from '../features/today/TasksToday'
-import RecurringTasksPlanner from '../features/today/RecurringTasksPlanner'
 import Schedule from '../features/today/Schedule'
 import ContentToday from '../features/today/ContentToday'
 import RitualTracker from '../features/today/RitualTracker'
@@ -34,7 +33,6 @@ export default function Today() {
       <DayNav date={date} />
       <div className="page-content">
         <TasksToday date={date} />
-        <RecurringTasksPlanner />
         <Schedule date={date} />
         <ContentToday date={date} />
         <RitualTracker date={date} />

@@ -56,6 +56,14 @@
 .calendar-day__num {
   font-size: 0.82rem;
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.calendar-day__cycle {
+  font-size: 0.62rem;
+  line-height: 1;
 }
 
 .calendar-day.is-outside {
@@ -120,4 +128,36 @@
 .calendar-hint {
   margin-top: 14px;
   text-align: center;
+}
+
+.cycle-settings {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(23, 20, 15, 0.08);
+}
+
+.cycle-settings__toggle {
+  font-size: 0.72rem;
+  padding: 6px 10px;
+}
+
+.cycle-settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cycle-settings__form label {
+  font-size: 0.7rem;
+  color: var(--color-muted);
+}
+
+.cycle-settings__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cycle-settings__row .input {
+  flex: 1;
 }

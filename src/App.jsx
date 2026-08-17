@@ -14,6 +14,7 @@ import { ScheduleProvider } from './context/ScheduleContext'
 import { RitualsProvider } from './context/RitualsContext'
 import { ContentProvider } from './context/ContentContext'
 import { RecurringTasksProvider } from './context/RecurringTasksContext'
+import { CycleProvider } from './context/CycleContext'
 import { NoteProvider } from './context/NoteContext'
 import { BudgetProvider } from './context/BudgetContext'
 import { SavingsProvider } from './context/SavingsContext'
@@ -27,15 +28,17 @@ function AppProviders({ children }) {
         <RitualsProvider>
           <ContentProvider>
             <RecurringTasksProvider>
-              <NoteProvider>
-                <BudgetProvider>
-                  <SavingsProvider>
-                    <BusinessProvider>
-                      <TodoProvider>{children}</TodoProvider>
-                    </BusinessProvider>
-                  </SavingsProvider>
-                </BudgetProvider>
-              </NoteProvider>
+              <CycleProvider>
+                <NoteProvider>
+                  <BudgetProvider>
+                    <SavingsProvider>
+                      <BusinessProvider>
+                        <TodoProvider>{children}</TodoProvider>
+                      </BusinessProvider>
+                    </SavingsProvider>
+                  </BudgetProvider>
+                </NoteProvider>
+              </CycleProvider>
             </RecurringTasksProvider>
           </ContentProvider>
         </RitualsProvider>

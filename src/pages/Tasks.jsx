@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import { usePriorities } from '../context/PrioritiesContext'
 import { useTodoItems } from '../context/TodoContext'
+import RecurringTasksGrid from '../features/tasks/RecurringTasksGrid'
 import {
   PRIORITY_LEVELS,
   PRIORITY_LEVEL_LABELS,
@@ -299,6 +300,8 @@ export default function Tasks() {
             </div>
           </form>
         </div>
+
+        <RecurringTasksGrid />
 
         <IdeasSection />
       </div>

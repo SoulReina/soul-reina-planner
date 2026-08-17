@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader'
 import { usePriorities } from '../context/PrioritiesContext'
 import { useSchedule } from '../context/ScheduleContext'
 import { useRituals } from '../context/RitualsContext'
+import { useCycle } from '../context/CycleContext'
 import {
   monthMatrix,
   formatMonthLabelFR,
@@ -11,6 +12,7 @@ import {
   isSameMonth,
   dayNumber,
   todayISO,
+  cyclePhase,
   WEEKDAY_LABELS_FR,
 } from '../utils/date'
 import './Calendar.css'
@@ -22,6 +24,9 @@ export default function Calendar() {
   const { priorities } = usePriorities()
   const { blocks } = useSchedule()
   const { rituals, logs } = useRituals()
+  const { startDate: cycleStart, updateStartDate } = useCycle()
+  const [editingCycle, setEditingCycle] = useState(false)
+  const [cycleDraft, setCycleDraft] = useState(today)
 
   const weeks = useMemo(() => monthMatrix(cursor), [cursor])
 
@@ -85,6 +90,7 @@ export default function Calendar() {
               {week.map((day) => {
                 const inMonth = isSameMonth(day, cursor)
                 const isToday = day === today
+                const phase = cyclePhase(day, cycleStart)
                 return (
                   <button
                     type="button"
@@ -96,7 +102,12 @@ export default function Calendar() {
                     }
                     onClick={() => navigate(`/jour/${day}`)}
                   >
-                    <span className="calendar-day__num">{dayNumber(day)}</span>
+                    <span className="calendar-day__num">
+                      {dayNumber(day)}
+                      <span className="calendar-day__cycle">
+                        {phase === 'period' ? '🩸' : '💊'}
+                      </span>
+                    </span>
                     <span className="calendar-day__dots">
                       {scheduleDates.has(day) && (
                         <span className="calendar-dot calendar-dot--pink" />
@@ -124,6 +135,48 @@ export default function Calendar() {
             <span>
               <span className="calendar-dot calendar-dot--sage" /> Rituels ✓
             </span>
+            <span>💊 Pilule</span>
+            <span>🩸 Règles</span>
+          </div>
+
+          <div className="cycle-settings">
+            {editingCycle ? (
+              <form
+                className="cycle-settings__form"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  updateStartDate(cycleDraft)
+                  setEditingCycle(false)
+                }}
+              >
+                <label htmlFor="cycle-start-date">
+                  Lundi de départ du cycle (3 sem. 💊 + 1 sem. 🩸)
+                </label>
+                <div className="cycle-settings__row">
+                  <input
+                    id="cycle-start-date"
+                    className="input"
+                    type="date"
+                    value={cycleDraft}
+                    onChange={(e) => setCycleDraft(e.target.value)}
+                  />
+                  <button type="submit" className="btn btn-ghost">
+                    Enregistrer
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-ghost cycle-settings__toggle"
+                onClick={() => {
+                  setCycleDraft(cycleStart)
+                  setEditingCycle(true)
+                }}
+              >
+                Régler la date de départ du cycle
+              </button>
+            )}
           </div>
         </div>
 

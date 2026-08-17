@@ -104,3 +104,18 @@ export const WEEKDAY_LABELS_FR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim
 export function dayNumber(isoDate) {
   return Number(isoDate.slice(8, 10))
 }
+
+function daysBetween(fromISO, toISO) {
+  const from = new Date(`${fromISO}T00:00:00`)
+  const to = new Date(`${toISO}T00:00:00`)
+  return Math.round((to - from) / 86400000)
+}
+
+// Cycle de 4 semaines (lundi à dimanche) : 3 semaines "pilule" puis 1
+// semaine "règles", à partir du lundi startDateISO, répété indéfiniment
+// dans les deux sens du temps.
+export function cyclePhase(isoDate, startDateISO) {
+  const weeksBetween = daysBetween(startOfWeek(startDateISO), startOfWeek(isoDate)) / 7
+  const phaseIndex = (((weeksBetween % 4) + 4) % 4)
+  return phaseIndex === 3 ? 'period' : 'pill'
+}

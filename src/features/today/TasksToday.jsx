@@ -7,7 +7,6 @@ import {
   levelRank,
 } from '../../lib/data/priorities'
 import { PlusIcon, TrashIcon } from '../../components/icons'
-import { weekdayIndex } from '../../utils/date'
 
 export default function TasksToday({ date }) {
   const {
@@ -27,19 +26,18 @@ export default function TasksToday({ date }) {
   const [draft, setDraft] = useState('')
   const [draftLevel, setDraftLevel] = useState('a_faire')
 
-  const weekday = weekdayIndex(date)
-
   const merged = useMemo(() => {
-    const priorityItems = priorities.map((p) => ({
-      kind: 'priority',
-      id: p.id,
-      text: p.content,
-      level: p.level,
-      done: p.is_done,
-      position: p.position,
-    }))
-    const recurringItems = recurringTasks
-      .filter((t) => t.weekdays.includes(weekday))
+    const priorityItems = [...priorities]
+      .sort((a, b) => levelRank(a.level) - levelRank(b.level) || a.position - b.position)
+      .map((p) => ({
+        kind: 'priority',
+        id: p.id,
+        text: p.content,
+        level: p.level,
+        done: p.is_done,
+      }))
+    const recurringItems = [...recurringTasks]
+      .sort((a, b) => a.position - b.position)
       .map((t) => {
         const log = recurringLogs.find(
           (l) => l.recurring_task_id === t.id && l.date === date
@@ -48,15 +46,11 @@ export default function TasksToday({ date }) {
           kind: 'recurring',
           id: t.id,
           text: t.title,
-          level: t.level,
           done: Boolean(log?.done),
-          position: 0,
         }
       })
-    return [...priorityItems, ...recurringItems].sort(
-      (a, b) => levelRank(a.level) - levelRank(b.level) || a.position - b.position
-    )
-  }, [priorities, recurringTasks, recurringLogs, weekday, date])
+    return [...priorityItems, ...recurringItems]
+  }, [priorities, recurringTasks, recurringLogs, date])
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -101,7 +95,7 @@ export default function TasksToday({ date }) {
               <span className={'row-text' + (item.done ? ' done' : '')}>
                 {item.text}
               </span>
-              {item.kind === 'priority' ? (
+              {item.kind === 'priority' && (
                 <select
                   className={'pill pill-' + item.level}
                   value={item.level}
@@ -114,10 +108,6 @@ export default function TasksToday({ date }) {
                     </option>
                   ))}
                 </select>
-              ) : (
-                <span className={'pill pill-' + item.level}>
-                  {PRIORITY_LEVEL_LABELS[item.level]}
-                </span>
               )}
               {item.kind === 'priority' && (
                 <button

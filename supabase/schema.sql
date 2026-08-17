@@ -101,6 +101,20 @@ create table if not exists notes (
   updated_at timestamptz not null default now()
 );
 
+-- Calendrier — cycle pilule/règles (global, une seule ligne) --------------
+-- start_date : lundi à partir duquel démarrent 3 semaines "pilule" suivies
+-- d'une semaine "règles", motif qui se répète indéfiniment dans les deux sens.
+
+create table if not exists cycle_settings (
+  id uuid primary key default gen_random_uuid(),
+  start_date date not null,
+  updated_at timestamptz not null default now()
+);
+
+insert into cycle_settings (start_date)
+select '2026-08-17'
+where not exists (select 1 from cycle_settings);
+
 -- Onglet "Budget" ----------------------------------------------------------
 
 create table if not exists budget_transactions (
@@ -310,6 +324,7 @@ alter table budget_variable_charge_entries enable row level security;
 alter table budget_exceptional_expenses enable row level security;
 alter table debts enable row level security;
 alter table business_envelopes enable row level security;
+alter table cycle_settings enable row level security;
 
 create policy "public access" on priorities for all using (true) with check (true);
 create policy "public access" on schedule_blocks for all using (true) with check (true);
@@ -332,3 +347,4 @@ create policy "public access" on budget_variable_charge_entries for all using (t
 create policy "public access" on budget_exceptional_expenses for all using (true) with check (true);
 create policy "public access" on debts for all using (true) with check (true);
 create policy "public access" on business_envelopes for all using (true) with check (true);
+create policy "public access" on cycle_settings for all using (true) with check (true);

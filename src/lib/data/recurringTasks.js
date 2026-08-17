@@ -21,11 +21,11 @@ export async function fetchRecurringTasks() {
     .sort((a, b) => a.position - b.position)
 }
 
-export async function createRecurringTask(title, weekdays, level = 'a_faire') {
+export async function createRecurringTask(title) {
   if (isSupabaseConfigured) {
     const { data, error } = await supabase
       .from('recurring_tasks')
-      .insert({ title, weekdays, level })
+      .insert({ title })
       .select()
       .single()
     if (error) throw error
@@ -35,29 +35,12 @@ export async function createRecurringTask(title, weekdays, level = 'a_faire') {
   const item = {
     id: crypto.randomUUID(),
     title,
-    weekdays,
-    level,
     active: true,
     position: all.length,
     created_at: new Date().toISOString(),
   }
   writeAll(TASKS_KEY, [...all, item])
   return item
-}
-
-export async function updateRecurringTaskWeekdays(id, weekdays) {
-  if (isSupabaseConfigured) {
-    const { error } = await supabase
-      .from('recurring_tasks')
-      .update({ weekdays })
-      .eq('id', id)
-    if (error) throw error
-    return
-  }
-  writeAll(
-    TASKS_KEY,
-    readAll(TASKS_KEY).map((t) => (t.id === id ? { ...t, weekdays } : t))
-  )
 }
 
 export async function deleteRecurringTask(id) {

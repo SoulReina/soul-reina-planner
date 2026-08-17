@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState, useCallback, useMemo } 
 import {
   fetchRecurringTasks,
   createRecurringTask,
-  updateRecurringTaskWeekdays,
   deleteRecurringTask,
   fetchAllRecurringTaskLogs,
   setRecurringTaskLog,
@@ -30,15 +29,10 @@ export function RecurringTasksProvider({ children }) {
     }
   }, [])
 
-  const addRecurringTask = useCallback(async (title, weekdays, level) => {
-    const task = await createRecurringTask(title, weekdays, level)
+  const addRecurringTask = useCallback(async (title) => {
+    const task = await createRecurringTask(title)
     setTasks((prev) => [...prev, task])
     return task
-  }, [])
-
-  const updateWeekdays = useCallback(async (id, weekdays) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, weekdays } : t)))
-    await updateRecurringTaskWeekdays(id, weekdays)
   }, [])
 
   const removeRecurringTask = useCallback(async (id) => {
@@ -69,11 +63,10 @@ export function RecurringTasksProvider({ children }) {
       logs,
       loading,
       addRecurringTask,
-      updateWeekdays,
       removeRecurringTask,
       toggleRecurringTaskLog,
     }),
-    [tasks, logs, loading, addRecurringTask, updateWeekdays, removeRecurringTask, toggleRecurringTaskLog]
+    [tasks, logs, loading, addRecurringTask, removeRecurringTask, toggleRecurringTaskLog]
   )
 
   return (
