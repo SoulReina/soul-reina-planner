@@ -79,10 +79,17 @@ create table if not exists recurring_tasks (
   title text not null,
   weekdays integer[] not null default '{}',
   level text not null default 'a_faire' check (level in ('urgent', 'important', 'a_faire')),
+  category text check (
+    category is null or category in (
+      'business_soulreina', 'business_reinacare', 'menage', 'beaute_sante', 'vie_personnelle'
+    )
+  ),
   active boolean not null default true,
   position integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+alter table recurring_tasks add column if not exists category text;
 
 create table if not exists recurring_task_logs (
   id uuid primary key default gen_random_uuid(),

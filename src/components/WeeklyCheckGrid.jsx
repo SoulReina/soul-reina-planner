@@ -1,4 +1,4 @@
-import { TrashIcon } from './icons'
+import { TrashIcon, PencilIcon } from './icons'
 import { WEEKDAY_LABELS_FR, dayNumber } from '../utils/date'
 import './WeeklyCheckGrid.css'
 
@@ -7,8 +7,10 @@ export default function WeeklyCheckGrid({
   week,
   today,
   isDone,
+  isScheduled,
   onToggle,
   onRemove,
+  onEdit,
 }) {
   return (
     <div className="weekly-grid-wrap">
@@ -39,22 +41,38 @@ export default function WeeklyCheckGrid({
                 )}
                 <span>{item.name}</span>
               </td>
-              {week.map((day) => (
-                <td
-                  key={day}
-                  className={
-                    'weekly-grid__cell' + (day === today ? ' is-today' : '')
-                  }
-                >
-                  <input
-                    type="checkbox"
-                    checked={isDone(item.id, day)}
-                    onChange={() => onToggle(item.id, day)}
-                    aria-label={`${item.name} — ${day}`}
-                  />
-                </td>
-              ))}
-              <td>
+              {week.map((day) => {
+                const scheduled = isScheduled ? isScheduled(item.id, day) : true
+                return (
+                  <td
+                    key={day}
+                    className={
+                      'weekly-grid__cell' +
+                      (day === today ? ' is-today' : '') +
+                      (scheduled ? '' : ' weekly-grid__cell--off')
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isDone(item.id, day)}
+                      onChange={() => onToggle(item.id, day)}
+                      disabled={!scheduled}
+                      aria-label={`${item.name} — ${day}`}
+                    />
+                  </td>
+                )
+              })}
+              <td className="weekly-grid__actions">
+                {onEdit && (
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-icon"
+                    onClick={() => onEdit(item.id)}
+                    aria-label="Modifier"
+                  >
+                    <PencilIcon width={14} height={14} />
+                  </button>
+                )}
                 <button
                   type="button"
                   className="btn btn-ghost btn-icon"

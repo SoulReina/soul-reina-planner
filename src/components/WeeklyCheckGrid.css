@@ -68,3 +68,18 @@
   height: 18px;
   accent-color: var(--color-pink-border);
 }
+
+.weekly-grid__cell--off {
+  opacity: 0.28;
+}
+
+.weekly-grid__cell--off input[type='checkbox'] {
+  cursor: not-allowed;
+}
+
+.weekly-grid__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}

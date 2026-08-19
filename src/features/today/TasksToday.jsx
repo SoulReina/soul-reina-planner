@@ -6,6 +6,8 @@ import {
   PRIORITY_LEVEL_LABELS,
   levelRank,
 } from '../../lib/data/priorities'
+import { categoryById, isScheduledOnWeekday } from '../../lib/data/recurringTasks'
+import { weekdayIndex } from '../../utils/date'
 import { PlusIcon, TrashIcon } from '../../components/icons'
 
 export default function TasksToday({ date }) {
@@ -36,7 +38,9 @@ export default function TasksToday({ date }) {
         level: p.level,
         done: p.is_done,
       }))
+    const weekday = weekdayIndex(date)
     const recurringItems = [...recurringTasks]
+      .filter((t) => isScheduledOnWeekday(t, weekday))
       .sort((a, b) => a.position - b.position)
       .map((t) => {
         const log = recurringLogs.find(
@@ -47,6 +51,7 @@ export default function TasksToday({ date }) {
           id: t.id,
           text: t.title,
           done: Boolean(log?.done),
+          category: categoryById(t.category),
         }
       })
     return [...priorityItems, ...recurringItems]
@@ -91,6 +96,13 @@ export default function TasksToday({ date }) {
                 <span className="task-recurring-mark" title="Tâche récurrente">
                   ↻
                 </span>
+              )}
+              {item.kind === 'recurring' && item.category && (
+                <span
+                  className="category-dot"
+                  style={{ background: item.category.color }}
+                  title={item.category.label}
+                />
               )}
               <span className={'row-text' + (item.done ? ' done' : '')}>
                 {item.text}
